@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FMM — Alert Spending Anomalie</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">FMM</span>
+        <div class="brand-text">
+          <div class="brand-title">Alert Spending Anomalie</div>
+          <div class="brand-sub">Windsor.ai · Meta · Google · TikTok</div>
+        </div>
+      </div>
+      <div class="meta" id="meta-info">Caricamento…</div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <h2>Storico check</h2>
+      <div class="sidebar-list" id="checks-list"></div>
+      <div class="sidebar-foot">
+        Dati aggiornati: <span id="last-update">—</span>
+      </div>
+    </aside>
+
+    <section class="content" id="content">
+      <div class="loading">Caricamento dashboard…</div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "last_updated": "2026-05-16T10:18:02+00:00",
+  "checks": [
+    {
+      "date": "2026-05-15",
+      "alerts_total": 26,
+      "zero": 9,
+      "spike": 17,
+      "accounts_checked": 63
+    }
+  ]
+}
