@@ -91,7 +91,7 @@ function renderAlerts(){
     <div class="cards">
       <div class="card"><div class="card-label">Data check</div><div class="card-value">${fmtDate(c.run_date)}</div><div class="card-sub">Eseguito ${fmtDateTime(c.executed_at)}</div></div>
       <div class="card"><div class="card-label">Account controllati</div><div class="card-value">${totAcc}</div><div class="card-sub">Meta ${ac.Meta||0} · Google ${ac.Google||0} · TikTok ${ac.TikTok||0}</div></div>
-      <div class="card"><div class="card-label">Investimento totale ieri</div><div class="card-value accent-spend">${totSpend!=null ? eur(totSpend) : "—"}</div><div class="card-sub">Somma spending portfolio, esclusi blocklist</div></div>
+      <div class="card"><div class="card-label">Investimento totale ieri</div><div class="card-value accent-spend">${totSpend!=null ? eur(totSpend) : "—"}</div><div class="card-sub">${c.summary.spend_by_platform ? `Meta ${eur(c.summary.spend_by_platform.Meta||0)} · Google ${eur(c.summary.spend_by_platform.Google||0)} · TikTok ${eur(c.summary.spend_by_platform.TikTok||0)}` : "Somma portfolio (escl. blocklist)"}</div></div>
       <div class="card"><div class="card-label">Zero anomalo</div><div class="card-value accent-zero">${zero.length}</div><div class="card-sub">Account a 0 € con storico &gt; 0</div></div>
       <div class="card"><div class="card-label">Spike sopra soglia</div><div class="card-value accent-spike">${spikes.length}</div><div class="card-sub">&gt;50 €/giorno o +30% vs media 7gg</div></div>
     </div>`;
