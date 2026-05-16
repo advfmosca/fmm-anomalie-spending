@@ -52,8 +52,9 @@ a:hover { text-decoration:underline; }
 .content { display:flex; flex-direction:column; gap:18px; min-width:0; }
 .loading { padding:60px; text-align:center; color:var(--muted); }
 
-.cards { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
-@media (max-width: 900px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+.cards { display:grid; grid-template-columns: repeat(5, 1fr); gap:12px; }
+@media (max-width: 1200px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 16px; }
 .card-label { font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:6px; font-weight:600; }
 .card-value { font-size:28px; font-weight:700; }
@@ -61,6 +62,7 @@ a:hover { text-decoration:underline; }
 .card-value.accent-zero { color:#c5a3ff; }
 .card-value.accent-spike { color:#ffa1b3; }
 .card-value.accent-ok { color:#7fe5b6; }
+.card-value.accent-spend { color:var(--accent-2); }
 
 .section { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; }
 .section h2 { margin:0 0 12px; font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px; }
@@ -77,6 +79,8 @@ table.alerts .plat { display:inline-block; padding:2px 8px; border-radius:6px; f
 .plat.Meta { background:var(--meta); }
 .plat.Google { background:var(--google); }
 .plat.TikTok { background:var(--tiktok); }
+.plat-badge { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--panel-2); border:1px solid var(--border); }
+.plat-logo { width:16px; height:16px; display:block; }
 .trigger-tag { display:inline-block; padding:2px 7px; border-radius:6px; font-size:11px; font-weight:600; background:var(--panel-2); color:var(--text); }
 .trigger-tag.both { background:rgba(255,77,109,.22); color:#ffa1b3; }
 .trigger-tag.spike50 { background:rgba(245,179,74,.18); color:#ffd28d; }

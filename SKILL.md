@@ -74,11 +74,14 @@ tt = json.loads(r"""<INCOLLA QUI il JSON dei tool result TikTok>""")["result"]
 
 def analyze(rows, platform):
     by = {}
+    tot_yest = 0.0
     for r in rows:
         aid = str(r["account_id"])
         if aid in EXCL: continue
         b = by.setdefault(aid, {"name": (r.get("account_name") or "").strip(), "s": {}})
-        b["s"][r["date"]] = float(r.get("spend") or 0)
+        s = float(r.get("spend") or 0)
+        b["s"][r["date"]] = s
+        if r["date"] == YEST: tot_yest += s
     alerts = []
     for aid, b in by.items():
         sy = b["s"].get(YEST, 0.0)
@@ -95,12 +98,13 @@ def analyze(rows, platform):
                            "spend_yest": round(sy,2), "avg7": round(avg,2),
                            "delta_pct": round(delta,1) if delta is not None else None,
                            "triggers": trig, "zero_anom": zero})
-    return alerts, len(by)
+    return alerts, len(by), round(tot_yest, 2)
 
-a_fb, n_fb = analyze(fb, "Meta")
-a_ga, n_ga = analyze(ga, "Google")
-a_tt, n_tt = analyze(tt, "TikTok")
+a_fb, n_fb, tot_fb = analyze(fb, "Meta")
+a_ga, n_ga, tot_ga = analyze(ga, "Google")
+a_tt, n_tt, tot_tt = analyze(tt, "TikTok")
 out = {"counts": {"Meta": n_fb, "Google": n_ga, "TikTok": n_tt},
+       "total_spend_yest": round(tot_fb + tot_ga + tot_tt, 2),
        "zero": [a for a in a_fb+a_ga+a_tt if a["zero_anom"]],
        "spike": [a for a in a_fb+a_ga+a_tt if not a["zero_anom"]]}
 out["zero"].sort(key=lambda a: -a["spend_yest"])
@@ -156,6 +160,7 @@ snapshot = {
   "executed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
   "summary": {
     "accounts_checked": run["counts"],
+    "total_spend_yest": run["total_spend_yest"],
     "alerts_total": len(run["zero"]) + len(run["spike"]),
     "zero_count": len(run["zero"]),
     "spike_count": len(run["spike"])
@@ -193,7 +198,7 @@ Componi un messaggio **breve** (no tabelle inline, no ripetizione dei dati: la d
 
 ```
 :rotating_light: *Check spending — <GG/MM/AAAA>*
-:zap: *<N zero>* zero anomalo · :fire: *<N spike>* sopra soglia · <totale account> account controllati
+:moneybag: Speso ieri: *<EUR>* · :zap: *<N zero>* zero anomalo · :fire: *<N spike>* sopra soglia · <totale account> account controllati
 
 :link: <URL dashboard> | Dashboard live
 ```
@@ -202,9 +207,9 @@ Esempio con valori reali:
 
 ```
 :rotating_light: *Check spending — 15/05/2026*
-:zap: *9* zero anomalo · :fire: *17* sopra soglia · 63 account controllati
+:moneybag: Speso ieri: *2.025,16 €* · :zap: *9* zero anomalo · :fire: *17* sopra soglia · 63 account controllati
 
-:link: https://moscadv.github.io/fmm-anomalie-spending/?date=2026-05-15
+:link: https://advfmosca.github.io/fmm-anomalie-spending/?date=2026-05-15
 ```
 
 ### Step 7 — Log finale

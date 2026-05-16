@@ -8,6 +8,16 @@ function fmtDate(iso){ const [y,m,d]=iso.split("-"); return `${d}/${m}/${y}`; }
 function fmtDateTime(iso){ const d=new Date(iso); return d.toLocaleString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }
 function platClass(p){ return p; }
 function deltaClass(n){ if(n==null) return "delta-na"; return n>=0 ? "delta-pos" : "delta-neg"; }
+const PLAT_LOGOS = {
+  Meta:   { src: "https://cdn.simpleicons.org/meta/0467df",        alt: "Meta" },
+  Google: { src: "https://cdn.simpleicons.org/googleads/4285F4",   alt: "Google Ads" },
+  TikTok: { src: "https://cdn.simpleicons.org/tiktok/FF0050",      alt: "TikTok" },
+};
+function platBadge(p){
+  const l = PLAT_LOGOS[p];
+  if(!l) return `<span class="plat ${p}">${p}</span>`;
+  return `<span class="plat-badge" title="${l.alt}"><img class="plat-logo" src="${l.src}" alt="${l.alt}" loading="lazy"></span>`;
+}
 
 async function loadJSON(path){
   const r = await fetch(path, {cache:"no-store"});
@@ -76,10 +86,12 @@ function renderAlerts(){
   const zero = c.zero_alerts || [];
   const spikes = c.spike_alerts || [];
 
+  const totSpend = c.summary.total_spend_yest;
   let html = `
     <div class="cards">
       <div class="card"><div class="card-label">Data check</div><div class="card-value">${fmtDate(c.run_date)}</div><div class="card-sub">Eseguito ${fmtDateTime(c.executed_at)}</div></div>
       <div class="card"><div class="card-label">Account controllati</div><div class="card-value">${totAcc}</div><div class="card-sub">Meta ${ac.Meta||0} · Google ${ac.Google||0} · TikTok ${ac.TikTok||0}</div></div>
+      <div class="card"><div class="card-label">Investimento totale ieri</div><div class="card-value accent-spend">${totSpend!=null ? eur(totSpend) : "—"}</div><div class="card-sub">Somma spending portfolio, esclusi blocklist</div></div>
       <div class="card"><div class="card-label">Zero anomalo</div><div class="card-value accent-zero">${zero.length}</div><div class="card-sub">Account a 0 € con storico &gt; 0</div></div>
       <div class="card"><div class="card-label">Spike sopra soglia</div><div class="card-value accent-spike">${spikes.length}</div><div class="card-sub">&gt;50 €/giorno o +30% vs media 7gg</div></div>
     </div>`;
@@ -95,7 +107,7 @@ function renderAlerts(){
       const rowId = `z-${i}`;
       const critical = (a.cause||"").includes("Account sospeso");
       html += `<tr class="acc-row" data-rid="${rowId}" data-aid="${a.account_id}" data-name="${a.name}" data-plat="${a.platform}">
-        <td><span class="plat ${platClass(a.platform)}">${a.platform}</span></td>
+        <td>${platBadge(a.platform)}</td>
         <td><strong>${a.name}</strong></td>
         <td class="num">${eur(a.spend_yest)}</td>
         <td class="num">${eur(a.avg7)}</td>
@@ -112,7 +124,7 @@ function renderAlerts(){
       const rowId = `s-${i}`;
       const t = triggerLabel(a.triggers);
       html += `<tr class="acc-row" data-rid="${rowId}" data-aid="${a.account_id}" data-name="${a.name}" data-plat="${a.platform}">
-        <td><span class="plat ${platClass(a.platform)}">${a.platform}</span></td>
+        <td>${platBadge(a.platform)}</td>
         <td><strong>${a.name}</strong></td>
         <td class="num">${eur(a.spend_yest)}</td>
         <td class="num">${eur(a.avg7)}</td>
